@@ -1,0 +1,126 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: #0f0f1b;
+    color: #fff;
+}
+
+header {
+    text-align: center;
+    padding: 25px 0;
+    font-size: 28px;
+    background: #141427;
+    border-bottom: 1px solid #2a2a48;
+}
+
+.container {
+    width: 95%;
+    margin: auto;
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* ---- İLAN KARTI ---- */
+.card {
+    background: #1a1a2e;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 10px #0004;
+    position: relative;
+    transition: 0.25s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 20px #0006;
+}
+
+.badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #0dc04d;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.product-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.info {
+    padding: 15px;
+}
+
+.info h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.info p {
+    color: #b8b8cc;
+    font-size: 14px;
+}
+
+/* Satıcı bilgisi */
+.seller {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-top: 1px solid #26263a;
+}
+
+.seller-img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.seller-name {
+    margin-left: 10px;
+    font-size: 15px;
+}
+
+/* Alt kısım */
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: #141427;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #47e77b;
+}
+
+.buy-btn {
+    background: #47e77b;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+}
+}
+
+.buy-btn:hover {
+    background: #38c666;
+}
