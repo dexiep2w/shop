@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Yorum Sitesi</title>
+<style>
+  body { font-family: Arial; max-width: 600px; margin: 2rem auto; }
+  input, textarea { width: 100%; padding: 8px; margin: 6px 0; }
+  button { padding: 10px 20px; cursor: pointer; }
+  .comment { border-bottom: 1px solid #ccc; padding: 10px 0; }
+  .comment strong { font-weight: bold; }
+  .comment time { font-size: 0.9em; color: #666; }
+</style>
+</head>
+<body>
+
+<h1>Yorum Yaz</h1>
+<input id="name" placeholder="Adınız" />
+<textarea id="comment" placeholder="Yorumunuz" rows="4"></textarea>
+<button onclick="addComment()">Gönder</button>
+
+<h2>Yorumlar</h2>
+<div id="comments"></div>
+
+<script>
+const KV_URL = "https://dashing-magpie-44371.upstash.io";
+const KV_TOKEN = "Aa1TAAIncDJkMzQ1NjY3Mzk3Njk0YjAxYjdlMjVlNDc2N2YzOTExOHAyNDQzNzE";
+
+async function loadComments() {
+  const res = await fetch(`${KV_URL}/lrange/comments/0/99`, {
+    headers: { Authorization: `Bearer ${KV_TOKEN}` }
+  });
+  const comments = await res.json();
+  const commentsDiv = document.getElementById('comments');
+  commentsDiv.innerHTML = '';
+
+  comments.forEach(c => {
+    let comment = JSON.parse(c);
+    const div = document.createElement('div');
+    div.className = 'comment';
+    div.innerHTML = `<strong>${comment.name}</strong> <time>${new Date(comment.date).toLocaleString()}</time><p>${comment.comment}</p>`;
+    commentsDiv.appendChild(div);
+  });
+}
+
+async function addComment() {
+  const name = document.getElementById('name').value.trim();
+  const comment = document.getElementById('comment').value.trim();
+  if(!name || !comment) return alert('Ad ve yorum zorunlu');
+
+  const res = await fetch(`${KV_URL}/lpush/comments`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${KV_TOKEN}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name, comment, date: new Date().toISOString() })
+  });
+
+  if(res.ok) {
+    alert('Yorum eklendi!');
+    document.getElementById('name').value = '';
+    document.getElementById('comment').value = '';
+    loadComments();
+  } else {
+    alert('Hata oluştu');
+  }
+}
+
+// Sayfa açılır açılmaz yorumları yükle
+loadComments();
+</script>
+
+</body>
+</html>
