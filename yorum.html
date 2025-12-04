@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yorum Sayfası</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 { text-align: center; }
+        .comment-box {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 10px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            background: #0070f3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .comment {
+            background: #f5f5f5;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Yorumlar</h1>
+
+    <textarea id="commentInput"
+              class="comment-box"
+              rows="4"
+              placeholder="Deneyiminizi buraya yazın..."></textarea>
+
+    <button class="btn" onclick="addComment()">Gönder</button>
+
+    <h2>Gönderilen Yorumlar</h2>
+    <div id="commentList"></div>
+
+    <script>
+        function addComment() {
+            const input = document.getElementById("commentInput");
+            const text = input.value.trim();
+            if (!text) return;
+
+            const list = document.getElementById("commentList");
+
+            const div = document.createElement("div");
+            div.className = "comment";
+            div.textContent = text;
+
+            list.prepend(div);
+            input.value = "";
+        }
+    </script>
+
+</body>
+</html>
