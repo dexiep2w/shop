@@ -1,30 +1,30 @@
-import { kv } from "@vercel/kv";
+// /api/comments.js
+import { Redis } from '@upstash/redis';
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
 
 export default async function handler(req, res) {
-  // Yorum ekleme
-  if (req.method === "POST") {
-    const { text } = JSON.parse(req.body);
-
-    if (!text || text.trim() === "") {
-      return res.status(400).json({ error: "Yorum boş olamaz." });
+  if (req.method === 'POST') {
+    const { name, comment } = req.body;
+    if (!name || !comment) {
+      return res.status(400).json({ error: 'Name and comment are required' });
     }
 
-    const comment = {
-      text,
-      date: new Date().toISOString()
-    };
+    // Yorumları "comments" listesine ekle
+    await redis.lpush('comments', JSON.stringify({ name, comment, date: new Date().toISOString() }));
 
-    await kv.lpush("comments", JSON.stringify(comment));
-
-    return res.status(200).json({ message: "Yorum kaydedildi." });
+    return res.status(201).json({ message: 'Comment added' });
   }
 
-  // Yorumları listeleme
-  if (req.method === "GET") {
-    const items = await kv.lrange("comments", 0, -1);
-    const comments = items.map((i) => JSON.parse(i));
-    return res.status(200).json(comments);
+  if (req.method === 'GET') {
+    // Son 100 yorumu getir
+    const comments = await redis.lrange('comments', 0, 99);
+    const parsedComments = comments.map(c => JSON.parse(c));
+    return res.status(200).json(parsedComments);
   }
 
-  res.status(405).json({ error: "Method not allowed" });
+  res.status(405).json({ error: 'Method not allowed' });
 }
